@@ -329,7 +329,7 @@ const LogsTable = () => {
                                 }}
                                 width={1}
                             >
-                                实际消耗
+                                实际消耗<br />(人民币)
                             </Table.HeaderCell>
                             <Table.HeaderCell
                                 style={{cursor: 'pointer'}}
@@ -378,6 +378,7 @@ const LogsTable = () => {
                                         <Table.Cell>
                                             {log.quota ? (
                                                 <>
+                                                  {quotaString}<br />
                                                     <span style={{color: 'grey'}}>¥{cnyValue}</span>
                                                 </>
                                             ) : ''}
