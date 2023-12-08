@@ -209,10 +209,14 @@ const LogsTable = () => {
             <Segment>
                 <Header as='h3'>
                     使用明细（总消耗额度：
-                    {showStat && renderQuota(stat.quota)}
+                    {showStat && <>
+                        {renderQuota(stat.quota)}
+                        <span style={{ color: 'grey' }}>   （实际消耗人民币¥{convertUSDToCNY(renderQuota(stat.quota))}）</span>
+                    </>}
                     {!showStat &&
                         <span onClick={handleEyeClick} style={{cursor: 'pointer', color: 'gray'}}>点击查看</span>}
                     ）
+                    <br />
                 </Header>
                 <Form>
                     <Form.Group>
