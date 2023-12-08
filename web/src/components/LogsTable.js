@@ -211,7 +211,7 @@ const LogsTable = () => {
                     使用明细（总消耗额度：
                     {showStat && <>
                         {renderQuota(stat.quota)}
-                        <span style={{ color: 'grey' }}>   （实际消耗人民币¥{convertUSDToCNY(renderQuota(stat.quota))}）</span>
+                        <span style={{ color: 'grey' }}>   实际消耗人民币¥{convertUSDToCNY(renderQuota(stat.quota))}</span>
                     </>}
                     {!showStat &&
                         <span onClick={handleEyeClick} style={{cursor: 'pointer', color: 'gray'}}>点击查看</span>}
