@@ -4,7 +4,6 @@ import { API, isAdmin, showError, timestamp2string } from '../helpers';
 
 import { ITEMS_PER_PAGE } from '../constants';
 import { renderQuota } from '../helpers/render';
-import log from "../pages/Log";
 
 function renderTimestamp(timestamp) {
   return (
@@ -26,9 +25,7 @@ const LOG_OPTIONS = [
   { key: '3', text: '管理', value: 3 },
   { key: '4', text: '系统', value: 4 }
 ];
-
 const USD_TO_CNY_RATE = 7.2;
-
 function convertUSDToCNY(usdString) {
   // 移除字符串中的美元符号
   const usd = parseFloat(usdString.replace('$', ''));
@@ -36,11 +33,6 @@ function convertUSDToCNY(usdString) {
   const cny = (usd * USD_TO_CNY_RATE).toFixed(6); // 保留6位小数
   return cny;
 }
-
-// 假设 renderQuota 函数返回的是 "$0.000046"
-const quotaString = renderQuota(log.quota, 6); // "$0.000046"
-const cnyValue = convertUSDToCNY(quotaString); // 使用转换函数计算人民币
-
 
 function renderType(type) {
   switch (type) {
@@ -317,7 +309,7 @@ const LogsTable = () => {
                 }}
                 width={1}
               >
-                输入
+                提示
               </Table.HeaderCell>
               <Table.HeaderCell
                 style={{ cursor: 'pointer' }}
@@ -326,7 +318,7 @@ const LogsTable = () => {
                 }}
                 width={1}
               >
-                输出
+                补全
               </Table.HeaderCell>
               <Table.HeaderCell
                 style={{ cursor: 'pointer' }}
@@ -335,8 +327,7 @@ const LogsTable = () => {
                 }}
                 width={1}
               >
-                额度<br />
-              美元/实际消耗的人民币
+                额度
               </Table.HeaderCell>
               <Table.HeaderCell
                 style={{ cursor: 'pointer' }}
@@ -358,6 +349,9 @@ const LogsTable = () => {
               )
               .map((log, idx) => {
                 if (log.deleted) return <></>;
+                const quotaString = renderQuota(log.quota, 6);
+                const cnyValue = convertUSDToCNY(quotaString);
+
                 return (
                   <Table.Row key={log.id}>
                     <Table.Cell>{renderTimestamp(log.created_at)}</Table.Cell>
