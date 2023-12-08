@@ -31,7 +31,7 @@ function convertUSDToCNY(usdString) {
     // 移除字符串中的美元符号
     const usd = parseFloat(usdString.replace('$', ''));
     // 将美元转换为人民币
-    const cny = (usd * USD_TO_CNY_RATE / 12).toFixed(6); // 保留6位小数
+    const cny = (usd * USD_TO_CNY_RATE / 24).toFixed(6); // 保留6位小数
     return cny;
 }
 
@@ -329,7 +329,7 @@ const LogsTable = () => {
                                 }}
                                 width={1}
                             >
-                                实际消耗<br />(人民币)
+                                实际消耗<br/>(人民币)
                             </Table.HeaderCell>
                             <Table.HeaderCell
                                 style={{cursor: 'pointer'}}
@@ -338,9 +338,9 @@ const LogsTable = () => {
                                 }}
                                 width={isAdminUser ? 4 : 6}
                             >
-                                详情<br />
-                                gpt3全系默认倍率代表充值优惠了24分之一<br />
-                                gpt4全系默认倍率x24(充值折扣)就是openai官方的费用倍率,再打折(折扣看首页)
+                                详情<br/>
+                                gpt3全系默认倍率代表充值优惠了24分之一<br/>
+                                gpt4全系默认倍率x24(充值折扣)得到openai官方的修正费用倍率,再打折(折扣看首页)
                             </Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
