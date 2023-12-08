@@ -4,6 +4,7 @@ import { API, isAdmin, showError, timestamp2string } from '../helpers';
 
 import { ITEMS_PER_PAGE } from '../constants';
 import { renderQuota } from '../helpers/render';
+import log from "../pages/Log";
 
 function renderTimestamp(timestamp) {
   return (
@@ -28,11 +29,17 @@ const LOG_OPTIONS = [
 
 const USD_TO_CNY_RATE = 7.2;
 
-function convertUSDToCNY(usd) {
-  // 确保输入的美元金额是一个数字，然后进行转换
-  const cny = parseFloat(usd) * USD_TO_CNY_RATE;
-  return cny.toFixed(6); // 根据需要保留小数位，这里我保留6位小数
+function convertUSDToCNY(usdString) {
+  // 移除字符串中的美元符号
+  const usd = parseFloat(usdString.replace('$', ''));
+  // 将美元转换为人民币
+  const cny = (usd * USD_TO_CNY_RATE).toFixed(6); // 保留6位小数
+  return cny;
 }
+
+// 假设 renderQuota 函数返回的是 "$0.000046"
+const quotaString = renderQuota(log.quota, 6); // "$0.000046"
+const cnyValue = convertUSDToCNY(quotaString); // 使用转换函数计算人民币
 
 
 function renderType(type) {
@@ -372,8 +379,8 @@ const LogsTable = () => {
                     <Table.Cell>
                       {log.quota ? (
                           <>
-                            {renderQuota(log.quota, 6)}<br />
-                            <span style={{ color: 'grey' }}>¥{convertUSDToCNY(log.quota)}</span>
+                            {quotaString}<br />
+                            <span style={{ color: 'grey' }}>¥{cnyValue}</span>
                           </>
                       ) : ''}
                     </Table.Cell>
