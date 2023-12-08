@@ -26,11 +26,12 @@ const LOG_OPTIONS = [
   { key: '4', text: '系统', value: 4 }
 ];
 
-// 假设汇率是 6.5，你可以从服务端获取实时汇率
 const USD_TO_CNY_RATE = 7.2;
 
 function convertUSDToCNY(usd) {
-  return (usd * USD_TO_CNY_RATE).toFixed(5); // 保留两位小数
+  // 确保输入的美元金额是一个数字，然后进行转换
+  const cny = parseFloat(usd) * USD_TO_CNY_RATE;
+  return cny.toFixed(6); // 根据需要保留小数位，这里我保留6位小数
 }
 
 
@@ -309,7 +310,7 @@ const LogsTable = () => {
                 }}
                 width={1}
               >
-                提示
+                输入
               </Table.HeaderCell>
               <Table.HeaderCell
                 style={{ cursor: 'pointer' }}
@@ -318,7 +319,7 @@ const LogsTable = () => {
                 }}
                 width={1}
               >
-                补全
+                输出
               </Table.HeaderCell>
               <Table.HeaderCell
                 style={{ cursor: 'pointer' }}
@@ -327,7 +328,8 @@ const LogsTable = () => {
                 }}
                 width={1}
               >
-                额度
+                额度<br />
+              美元/实际消耗的人民币
               </Table.HeaderCell>
               <Table.HeaderCell
                 style={{ cursor: 'pointer' }}
