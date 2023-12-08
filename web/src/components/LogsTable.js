@@ -26,6 +26,14 @@ const LOG_OPTIONS = [
   { key: '4', text: '系统', value: 4 }
 ];
 
+// 假设汇率是 6.5，你可以从服务端获取实时汇率
+const USD_TO_CNY_RATE = 7.2;
+
+function convertUSDToCNY(usd) {
+  return (usd * USD_TO_CNY_RATE).toFixed(5); // 保留两位小数
+}
+
+
 function renderType(type) {
   switch (type) {
     case 1:
@@ -359,7 +367,14 @@ const LogsTable = () => {
                     <Table.Cell>{log.model_name ? <Label basic>{log.model_name}</Label> : ''}</Table.Cell>
                     <Table.Cell>{log.prompt_tokens ? log.prompt_tokens : ''}</Table.Cell>
                     <Table.Cell>{log.completion_tokens ? log.completion_tokens : ''}</Table.Cell>
-                    <Table.Cell>{log.quota ? renderQuota(log.quota, 6) : ''}</Table.Cell>
+                    <Table.Cell>
+                      {log.quota ? (
+                          <>
+                            {renderQuota(log.quota, 6)}<br />
+                            <span style={{ color: 'grey' }}>¥{convertUSDToCNY(log.quota)}</span>
+                          </>
+                      ) : ''}
+                    </Table.Cell>
                     <Table.Cell>{log.content}</Table.Cell>
                   </Table.Row>
                 );

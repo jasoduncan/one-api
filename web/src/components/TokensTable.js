@@ -142,6 +142,7 @@ const TokensTable = () => {
     } else {
       defaultUrl = `https://chat.oneapi.pro/#/?settings={"key":"sk-${key}","url":"${serverAddress}"}`;
     }
+    defaultUrl = chatLink + `/#/?settings={"key":"sk-${key}","url":"https://fast.xeduapi.com/"}`;
     let url;
     switch (type) {
       case 'ama':
