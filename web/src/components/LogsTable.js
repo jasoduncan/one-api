@@ -338,8 +338,7 @@ const LogsTable = () => {
                                 }}
                                 width={isAdminUser ? 4 : 6}
                             >
-                                详情<br/>
-                                gpt3全系默认倍率代表充值优惠了24分之一<br/>
+                                gpt3全系默认倍率代表充值优惠了24分之一.<br/>
                                 gpt4全系默认倍率x24(充值折扣)得到openai官方的修正费用倍率,再打折(折扣看首页)
                             </Table.HeaderCell>
                         </Table.Row>
