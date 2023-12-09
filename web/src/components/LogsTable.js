@@ -60,11 +60,18 @@ const LogsTable = () => {
     const [logType, setLogType] = useState(0);
     const isAdminUser = isAdmin();
     let now = new Date();
+
+    //修改开始时间为今天0点
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to 0
+    const todayTimestamp = Math.floor(today.getTime() / 1000); // Converting milliseconds to seconds
+    const startTimestamp = timestamp2string(todayTimestamp);
+
     const [inputs, setInputs] = useState({
         username: '',
         token_name: '',
         model_name: '',
-        start_timestamp: timestamp2string(0),
+        start_timestamp: startTimestamp,
         end_timestamp: timestamp2string(now.getTime() / 1000 + 3600),
         channel: ''
     });
@@ -342,7 +349,7 @@ const LogsTable = () => {
                                 }}
                                 width={isAdminUser ? 4 : 6}
                             >
-                                gpt3全系默认倍率代表费用是官方的24分之一(充值折扣)).<br/>
+                                gpt3.5全系默认倍率代表费用是官方的24分之一(充值折扣).<br/>
                                 gpt4全系默认倍率x24(充值折扣)得到openai官方的修正费用倍率,再打折(折扣看首页)
                             </Table.HeaderCell>
                         </Table.Row>
