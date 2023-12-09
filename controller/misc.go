@@ -3,12 +3,12 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"one-api/common"
 	"one-api/model"
+	"regexp"
 	"strings"
-
-	"github.com/gin-gonic/gin"
 )
 
 func GetStatus(c *gin.Context) {
@@ -71,6 +71,19 @@ func GetHomePageContent(c *gin.Context) {
 	return
 }
 
+func validateEmail(email string) bool {
+	var qqEmail = `^\d+@qq\.com$`
+	var gmailEmail = `^[a-zA-Z0-9]+@gmail\.com$`
+
+	if matched, _ := regexp.MatchString(qqEmail, email); matched {
+		return true
+	}
+	if matched, _ := regexp.MatchString(gmailEmail, email); matched {
+		return true
+	}
+	return false
+}
+
 func SendEmailVerification(c *gin.Context) {
 	email := c.Query("email")
 	if err := common.Validate.Var(email, "required,email"); err != nil {
@@ -96,6 +109,13 @@ func SendEmailVerification(c *gin.Context) {
 			return
 		}
 	}
+	if !validateEmail(email) {
+		c.JSON(http.StatusOK, gin.H{
+			"success": false,
+			"message": "请勿使用别名邮箱",
+		})
+		return
+	}
 	if model.IsEmailAlreadyTaken(email) {
 		c.JSON(http.StatusOK, gin.H{
 			"success": false,
@@ -103,6 +123,7 @@ func SendEmailVerification(c *gin.Context) {
 		})
 		return
 	}
+
 	code := common.GenerateVerificationCode(6)
 	common.RegisterVerificationCodeWithKey(email, code, common.EmailVerificationPurpose)
 	subject := fmt.Sprintf("%s邮箱验证邮件", common.SystemName)

@@ -6,13 +6,12 @@ import Turnstile from 'react-turnstile';
 
 const RegisterForm = () => {
   const [inputs, setInputs] = useState({
-    username: '',
     password: '',
     password2: '',
     email: '',
     verification_code: ''
   });
-  const { username, password, password2 } = inputs;
+  const { password, password2 } = inputs;
   const [showEmailVerification, setShowEmailVerification] = useState(false);
   const [turnstileEnabled, setTurnstileEnabled] = useState(false);
   const [turnstileSiteKey, setTurnstileSiteKey] = useState('');
@@ -53,7 +52,7 @@ const RegisterForm = () => {
       showInfo('两次输入的密码不一致');
       return;
     }
-    if (username && password) {
+    if (inputs.email && password) {
       if (turnstileEnabled && turnstileToken === '') {
         showInfo('请稍后几秒重试，Turnstile 正在检查用户环境！');
         return;
@@ -62,10 +61,11 @@ const RegisterForm = () => {
       if (!affCode) {
         affCode = localStorage.getItem('aff');
       }
+      inputs.username = inputs.email; // Set username as email
       inputs.aff_code = affCode;
       const res = await API.post(
-        `/api/user/register?turnstile=${turnstileToken}`,
-        inputs
+          `/api/user/register?turnstile=${turnstileToken}`,
+          inputs
       );
       const { success, message } = res.data;
       if (success) {
@@ -86,7 +86,7 @@ const RegisterForm = () => {
     }
     setLoading(true);
     const res = await API.get(
-      `/api/verification?email=${inputs.email}&turnstile=${turnstileToken}`
+        `/api/verification?email=${inputs.email}&turnstile=${turnstileToken}`
     );
     const { success, message } = res.data;
     if (success) {
@@ -98,96 +98,90 @@ const RegisterForm = () => {
   };
 
   return (
-    <Grid textAlign='center' style={{ marginTop: '48px' }}>
-      <Grid.Column style={{ maxWidth: 450 }}>
-        <Header as='h2' color='' textAlign='center'>
-          <Image src={logo} /> 新用户注册
-        </Header>
-        <Form size='large'>
-          <Segment>
-            <Form.Input
-              fluid
-              icon='user'
-              iconPosition='left'
-              placeholder='输入用户名，最长 12 位'
-              onChange={handleChange}
-              name='username'
-            />
-            <Form.Input
-              fluid
-              icon='lock'
-              iconPosition='left'
-              placeholder='输入密码，最短 8 位，最长 20 位'
-              onChange={handleChange}
-              name='password'
-              type='password'
-            />
-            <Form.Input
-              fluid
-              icon='lock'
-              iconPosition='left'
-              placeholder='输入密码，最短 8 位，最长 20 位'
-              onChange={handleChange}
-              name='password2'
-              type='password'
-            />
-            {showEmailVerification ? (
-              <>
-                <Form.Input
-                  fluid
-                  icon='mail'
-                  iconPosition='left'
-                  placeholder='输入邮箱地址'
-                  onChange={handleChange}
-                  name='email'
-                  type='email'
-                  action={
-                    <Button onClick={sendVerificationCode} disabled={loading}>
-                      获取验证码
-                    </Button>
-                  }
-                />
-                <Form.Input
+      <Grid textAlign='center' style={{ marginTop: '48px' }}>
+        <Grid.Column style={{ maxWidth: 450 }}>
+          <Header as='h2' color='' textAlign='center'>
+            <Image src={logo} /> 新用户注册
+          </Header>
+          <Form size='large'>
+            <Segment>
+
+              {showEmailVerification ? (
+                  <>
+                    <Form.Input
+                        fluid
+                        icon='mail'
+                        iconPosition='left'
+                        placeholder='输入邮箱地址(qq或者谷歌邮箱)'
+                        onChange={handleChange}
+                        name='email'
+                        type='email'
+                        action={
+                          <Button onClick={sendVerificationCode} disabled={loading}>
+                            获取验证码
+                          </Button>
+                        }
+                    />
+                    <Form.Input
+                        fluid
+                        icon='lock'
+                        iconPosition='left'
+                        placeholder='输入验证码'
+                        onChange={handleChange}
+                        name='verification_code'
+                    />
+                  </>
+              ) : (
+                  <></>
+              )}
+              {turnstileEnabled ? (
+                  <Turnstile
+                      sitekey={turnstileSiteKey}
+                      onVerify={(token) => {
+                        setTurnstileToken(token);
+                      }}
+                  />
+              ) : (
+                  <></>
+              )}
+              <Form.Input
                   fluid
                   icon='lock'
                   iconPosition='left'
-                  placeholder='输入验证码'
+                  placeholder='输入密码，最短 8 位，最长 20 位'
                   onChange={handleChange}
-                  name='verification_code'
-                />
-              </>
-            ) : (
-              <></>
-            )}
-            {turnstileEnabled ? (
-              <Turnstile
-                sitekey={turnstileSiteKey}
-                onVerify={(token) => {
-                  setTurnstileToken(token);
-                }}
+                  name='password'
+                  type='password'
               />
-            ) : (
-              <></>
-            )}
-            <Button
-              color='green'
-              fluid
-              size='large'
-              onClick={handleSubmit}
-              loading={loading}
-            >
-              注册
-            </Button>
-          </Segment>
-        </Form>
-        <Message>
-          已有账户？
-          <Link to='/login' className='btn btn-link'>
-            点击登录
-          </Link>
-        </Message>
-      </Grid.Column>
-    </Grid>
+              <Form.Input
+                  fluid
+                  icon='lock'
+                  iconPosition='left'
+                  placeholder='输入密码，最短 8 位，最长 20 位'
+                  onChange={handleChange}
+                  name='password2'
+                  type='password'
+              />
+
+              <Button
+                  color='green'
+                  fluid
+                  size='large'
+                  onClick={handleSubmit}
+                  loading={loading}
+              >
+                注册
+              </Button>
+            </Segment>
+          </Form>
+          <Message>
+            已有账户？
+            <Link to='/login' className='btn btn-link'>
+              点击登录
+            </Link>
+          </Message>
+        </Grid.Column>
+      </Grid>
   );
 };
 
