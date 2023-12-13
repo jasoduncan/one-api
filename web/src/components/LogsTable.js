@@ -25,14 +25,14 @@ const LOG_OPTIONS = [
     {key: '3', text: '管理', value: 3},
     {key: '4', text: '系统', value: 4}
 ];
-const USD_TO_CNY_RATE = 7.2;
+const USD_TO_CNY_RATE = 0.3;
 
 function convertUSDToCNY(usdString) {
     // 移除字符串中的美元符号
     const usd = parseFloat(usdString.replace('$', ''));
     // 将美元转换为人民币
-    const cny = (usd * USD_TO_CNY_RATE / 24).toFixed(6); // 保留6位小数
-    return cny;
+     // 保留6位小数
+    return (usd * USD_TO_CNY_RATE).toFixed(6);
 }
 
 function renderType(type) {
