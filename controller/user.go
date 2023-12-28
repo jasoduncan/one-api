@@ -442,7 +442,13 @@ func UpdateSelf(c *gin.Context) {
 }
 
 func DeleteUser(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
+	c.JSON(http.StatusOK, gin.H{
+		"success": false,
+		"message": "请联系管理员",
+	})
+	return
+
+	/*id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"success": false,
@@ -473,34 +479,39 @@ func DeleteUser(c *gin.Context) {
 			"message": "",
 		})
 		return
-	}
+	}*/
 }
 
 func DeleteSelf(c *gin.Context) {
-	id := c.GetInt("id")
-	user, _ := model.GetUserById(id, false)
-
-	if user.Role == common.RoleRootUser {
-		c.JSON(http.StatusOK, gin.H{
-			"success": false,
-			"message": "不能删除超级管理员账户",
-		})
-		return
-	}
-
-	err := model.DeleteUserById(id)
-	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"success": false,
-			"message": err.Error(),
-		})
-		return
-	}
 	c.JSON(http.StatusOK, gin.H{
-		"success": true,
-		"message": "",
+		"success": false,
+		"message": "请联系管理员",
 	})
-	return
+	/*	return
+		id := c.GetInt("id")
+		user, _ := model.GetUserById(id, false)
+
+		if user.Role == common.RoleRootUser {
+			c.JSON(http.StatusOK, gin.H{
+				"success": false,
+				"message": "不能删除超级管理员账户",
+			})
+			return
+		}
+
+		err := model.DeleteUserById(id)
+		if err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"success": false,
+				"message": err.Error(),
+			})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"success": true,
+			"message": "",
+		})
+		return*/
 }
 
 func CreateUser(c *gin.Context) {
